@@ -45,14 +45,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import androidx.compose.ui.graphics.painter.ColorPainter
 import com.example.jzunigamusicapp.model.Album
 import com.example.jzunigamusicapp.network.RetrofitClient
+import com.example.jzunigamusicapp.ui.components.MiniPlayer
 
 @Composable
 fun HomeScreen(onAlbumClick: (String) -> Unit) {
     var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
+    var isPlaying by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         try {
@@ -80,7 +83,9 @@ fun HomeScreen(onAlbumClick: (String) -> Unit) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF8F5FC))) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 72.dp)
         ) {
             // Header con degradado morado
             item {
@@ -160,11 +165,16 @@ fun HomeScreen(onAlbumClick: (String) -> Unit) {
             items(albums) { album ->
                 RecentlyPlayedItem(album = album, onClick = { onAlbumClick(album.albumId) })
             }
+        }
 
-            // Espacio para el mini reproductor
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
-            }
+        // Mini reproductor fijo abajo
+        if (albums.isNotEmpty()) {
+            MiniPlayer(
+                album = albums.first(),
+                isPlaying = isPlaying,
+                onPlayPauseClick = { isPlaying = !isPlaying },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }
@@ -183,6 +193,8 @@ fun AlbumCard(album: Album, onClick: () -> Unit) {
             AsyncImage(
                 model = album.image,
                 contentDescription = album.title,
+                placeholder = ColorPainter(Color(0xFFE8DEF8)),
+                error = ColorPainter(Color(0xFFE8DEF8)),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -255,6 +267,8 @@ fun RecentlyPlayedItem(album: Album, onClick: () -> Unit) {
             AsyncImage(
                 model = album.image,
                 contentDescription = album.title,
+                placeholder = ColorPainter(Color(0xFFE8DEF8)),
+                error = ColorPainter(Color(0xFFE8DEF8)),
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(8.dp)),

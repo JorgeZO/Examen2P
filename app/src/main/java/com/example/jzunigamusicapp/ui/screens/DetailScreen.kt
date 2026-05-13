@@ -42,14 +42,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import androidx.compose.ui.graphics.painter.ColorPainter
 import com.example.jzunigamusicapp.model.Album
 import com.example.jzunigamusicapp.network.RetrofitClient
+import com.example.jzunigamusicapp.ui.components.MiniPlayer
 
 @Composable
 fun DetailScreen(albumId: String, onBack: () -> Unit) {
     var album by remember { mutableStateOf<Album?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
+    var isPlaying by remember { mutableStateOf(false) }
 
     LaunchedEffect(albumId) {
         try {
@@ -79,7 +82,9 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF8F5FC))) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 72.dp)
         ) {
             // Header con imagen grande y scrim morado
             item {
@@ -93,6 +98,8 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
                     AsyncImage(
                         model = currentAlbum.image,
                         contentDescription = currentAlbum.title,
+                        placeholder = ColorPainter(Color(0xFFE8DEF8)),
+                        error = ColorPainter(Color(0xFFE8DEF8)),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -257,6 +264,8 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
                         AsyncImage(
                             model = currentAlbum.image,
                             contentDescription = null,
+                            placeholder = ColorPainter(Color(0xFFE8DEF8)),
+                            error = ColorPainter(Color(0xFFE8DEF8)),
                             modifier = Modifier
                                 .size(48.dp)
                                 .clip(RoundedCornerShape(8.dp)),
@@ -283,11 +292,14 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
                     }
                 }
             }
-
-            // Espacio para mini reproductor
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
-            }
         }
+
+        // Mini reproductor fijo abajo
+        MiniPlayer(
+            album = currentAlbum,
+            isPlaying = isPlaying,
+            onPlayPauseClick = { isPlaying = !isPlaying },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
