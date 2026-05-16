@@ -49,7 +49,7 @@ fun MiniPlayer(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = album.image,
+                model = album.fixedImage,
                 contentDescription = album.title,
                 placeholder = ColorPainter(Color(0xFFE8DEF8)),
                 error = ColorPainter(Color(0xFFE8DEF8)),

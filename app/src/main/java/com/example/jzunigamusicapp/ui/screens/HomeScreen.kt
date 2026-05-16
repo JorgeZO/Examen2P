@@ -191,7 +191,7 @@ fun AlbumCard(album: Album, onClick: () -> Unit) {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
-                model = album.image,
+                model = album.fixedImage,
                 contentDescription = album.title,
                 placeholder = ColorPainter(Color(0xFFE8DEF8)),
                 error = ColorPainter(Color(0xFFE8DEF8)),
@@ -265,7 +265,7 @@ fun RecentlyPlayedItem(album: Album, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = album.image,
+                model = album.fixedImage,
                 contentDescription = album.title,
                 placeholder = ColorPainter(Color(0xFFE8DEF8)),
                 error = ColorPainter(Color(0xFFE8DEF8)),

@@ -96,7 +96,7 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
                         .clip(RoundedCornerShape(24.dp))
                 ) {
                     AsyncImage(
-                        model = currentAlbum.image,
+                        model = currentAlbum.fixedImage,
                         contentDescription = currentAlbum.title,
                         placeholder = ColorPainter(Color(0xFFE8DEF8)),
                         error = ColorPainter(Color(0xFFE8DEF8)),
@@ -262,7 +262,7 @@ fun DetailScreen(albumId: String, onBack: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AsyncImage(
-                            model = currentAlbum.image,
+                            model = currentAlbum.fixedImage,
                             contentDescription = null,
                             placeholder = ColorPainter(Color(0xFFE8DEF8)),
                             error = ColorPainter(Color(0xFFE8DEF8)),
